@@ -1,0 +1,5 @@
+Requisitos:
+
+1.  Organizar la información de los estudiantes según sus nombres completos, teniendo en cuenta su primer nombre, siguiendo el orden del alfabeto
+2. Relacionar a cada estudiante con su numero de identificación (T.I. ó C.C.), curso al que se inscribe, carrera cursada, semestre cursado …
+3. Finalizar la BD en el menor tiempo posible para que el cliente pueda darle uso lo antes posible en la Universidad del Rosario, antes de un mayor transcurso en el semestre universitario
