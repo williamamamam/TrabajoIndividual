@@ -1,0 +1,19 @@
+Módulo: Vehiculo
+
+Relación con modulo de Conductores ya que debe tener como propiedades:
+
+- Nombre completo y numero de identificación del conductor de un vehiculo
+
+------------------------------------
+
+Relación con modulo de Viaje ya que debe tener como propiedades:
+
+- # de viajes realizados por un vehiculo
+
+------------------------------------
+
+Mas propiedades que podría tener:
+
+- Placa del vehiculo
+- Modelo del vehiculo
+
