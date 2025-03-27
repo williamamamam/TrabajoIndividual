@@ -5,6 +5,7 @@ SET SQL_SAFE_UPDATES = 0;
 create database TiendaMascota;
 /*Habilitar la base de datos*/
 use TiendaMascota;
+set SQL_SAFE_UPDATES=1;
 /*Creacion de tablas*/
 create table Mascota(
 idMascota int primary key,
@@ -88,18 +89,23 @@ end
 //Delimiter
 */
 
-/*Creacion de procedimiento almacenado*/
-drop procedure InsertarVacuna;
+-- 1 
 DELIMITER //
-CREATE PROCEDURE InsertarVacuna(in codigoVacuna int, nombreVacuna varchar(15),
-dosisVacuna int, enfermedad Varchar(15))
-Begin
-	insert into vacuna values(codigoVacuna,nombreVacuna,dosisVacuna,enfermedad);
-end //
+
+CREATE PROCEDURE InsertarVacunaMascota(
+    IN p_codigoVacuna INT,
+    IN p_idMascota INT,
+    IN p_enfermedad VARCHAR(15)
+)
+BEGIN
+    -- Insertar un registro en la tabla Mascota_Vacuna
+    INSERT INTO Mascota_Vacuna (codigoVacunaFK, idMascotaFK, enfermedad)
+    VALUES (p_codigoVacuna, p_idMascota, p_enfermedad);
+END //
+
 DELIMITER ;
 
-select * from vacuna;
-call InsertarVacuna(3,'Hepatitis',4,'ETS');
+CALL InsertarVacunaMascota(3, 1, 'Rabia');
 
 CREATE PROCEDURE InsertarMascota(in idMascota int, nombreMascota varchar(10),
 generoMascota varchar(15), razaMascota varchar(15), cantidad int)
@@ -118,25 +124,145 @@ CREATE PROCEDURE ConsultarPrecio(in precio float,out total float)
 Begin
 	select count(*) into precio from producto;
 end //
-DELIMITER ;
+DELIMITER ;|
 
 call ConsultarPrecio(@resultado);
 
-drop procedure ConsultarVacuna;
 DELIMITER //
-CREATE PROCEDURE ConsultarVacuna(in dosisVacuna int ,out totalVacunas float)
-Begin
-	select count(*) into totalVacunas from Vacuna;
-end //
-DELIMITER;
 
+CREATE PROCEDURE ConsultarVacunasMascota(
+    IN p_idMascota INT
+)
+BEGIN
+    -- Consultar las vacunas y las enfermedades para una mascota específica
+    SELECT 
+        m.nombreMascota,
+        v.nombreVacuna,
+        mv.enfermedad 
+    FROM 
+        Mascota_Vacuna mv
+    JOIN 
+        Vacuna v ON mv.codigoVacunaFK = v.codigoVacuna
+    JOIN 
+        Mascota m ON mv.idMascotaFK = m.idMascota
+    WHERE 
+        mv.idMascotaFK = p_idMascota;
+END //
+
+/*27 MAR --------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/*VISTAS VIEWS Es una consulta en la BD que genera una tabla virtual*/
+
+/*SINTAXIS*/
+/*create view nombreLista as
+select valoresAConsultar from nombreTabla where condiciones
+para ejectura se realiza una consulta de la vista
+*/
+describe cliente;
+create view vistaCliente as 
+select * from cliente where cedulaCliente = 1031650258;
+
+select * from vistaCliente;
+
+create view numeroCliente as 
+select * from cliente where telefono like '%1%' or telefono like '%5%' or telefono like '%7%';
+drop view numeroCliente;
+
+select * from numeroCliente;
+
+/*disparadores Triggers
+tipos
+before insert
+before update
+before delete
+se ejecutan antes de la operacion
+
+after insert
+after update
+after delete
+se ejecutan despues de la operacion
+
+sintaxis
+DELIMITER//
+create trigger nombreTrigger
+after insert on nombreTabla 
+for each row 
+BEGIN
+END	
+//
+DELIMITER;
+*/
+
+/*Crear u trigger para registrar en una tabla consolidadad cada vez que se inserte ina mascota*/
+
+create table consolidado(
+idMascota int primary key,
+nombreMascota varchar (15),
+generoMascota varchar (15),
+razaMascota varchar (15),
+cantidad int (10)
+);
+
+drop trigger registrarConsolidadoMascota;
 DELIMITER //
-CREATE PROCEDURE ConsultarEnfermedad(in enfermedad varchar(15) ,out EnfermedadMascota float)
-Begin
-	select count(*) into totalVacunas from Vacuna;
-end //
+CREATE trigger registrarConsolidadoMascota
+after insert on mascota
+for each row
+BEGIN
+	insert into consolidado values(new.idMascota, new.nombreMascota,new.generoMascota,new.razaMascota,new.cantidad); 
+END //
 DELIMITER ;
 
+insert into Mascota values(6,'Mateo', 'Masculino','labrador',2);
+
+select  * from consolidado;
+
+
+create table clienteEliminados(
+cedulaCliente int primary key,
+nombreCliente varchar (15),
+apellidoCliente varchar (15),
+direccionCliente varchar (10),
+telefono int (10),
+idMascotaFK int
+);
+
+create table mascotaEliminada(
+idMascota int primary key,
+nombreMascota varchar (15),
+generoMascota varchar (15),
+razaMascota varchar (15),
+cantidad int (10)
+);
+
+DELIMITER //
+CREATE trigger mascotasEliminadas
+after delete on mascota
+for each row
+BEGIN
+	insert into mascotasEliminadas values(old.idMascota, old.nombreMascota,old.generoMascota,old.razaMascota,old.cantidad); 
+END //
+DELIMITER ;
+
+delete from mascota where idMascota = 1;
+
+select * from mascota;
+
+ALTER TABLE Cliente
+ADD CONSTRAINT fk_cliente_mascota
+FOREIGN KEY (idMascotaFK) REFERENCES Mascota(idMascota)
+ON DELETE CASCADE;
+
+DELIMITER //
+CREATE TRIGGER clientesEliminados
+AFTER DELETE ON Cliente
+FOR EACH ROW
+BEGIN
+    INSERT INTO clienteEliminados 
+    (cedulaCliente, nombreCliente, apellidoCliente, direccionCliente, telefono, idMascotaFK)
+    VALUES
+    (OLD.cedulaCliente, OLD.nombreCliente, OLD.apellidoCliente, OLD.direccionCliente, OLD.telefono, OLD.idMascotaFK);
+END //
+DELIMITER ;
 
 
 
