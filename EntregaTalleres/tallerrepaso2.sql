@@ -189,7 +189,7 @@ ORDER BY Total_Vendido DESC;
 /* having */
 /*Est iria mejor si tuviera otra tabla llamada departamento y le pongo a los departamensot un idDepartamentoFK ya que hay empleados en varios 
 departamentos, pero como lo tengo pues cada empleado solo esta en su idEmpleado*/
-select idEmpleado, count(*) as 'total empleados' from empleados group by idEmpleado having count(*)>=0;
+#select idEmpleado, count(*) as 'total empleados' from empleados group by idEmpleado having count(*)>=0;
 
 /*moidificacion */
 /*update nombreTabla set camposModificar = 'ValorReemplazo', campoModificar2 = 'ValorReemplazo2' where llavePrimaria = 'valor'*/
@@ -205,15 +205,49 @@ drop table empleados;
 /*Procedimientos almacenados 
 Stored Procedure conjunto de instrucciones de SQL que se almacenan en y estos se pueden ejecutar muchas veces*/
 
-/*Sintaxis del procedimiento
-delimiter //
-create procedure nombreProcedimiento(parametros)
-begin
---instrucciones de sql
-end
-//Delimiter
+/*
+/*Sintaxis del Procedimiento
+DELIMITER//
+CREATE PROCEDURE nombreProcedimiento(parametros entrada in salida out)
+BEGIN
+--instrucciones de SQL 
+END
+// DELIMITER;
 */
+/*
+select * from Mascota;
+-- Creación de Procedimiento almacenado
+DELIMITER //
+CREATE PROCEDURE InsertarMascota(in idMascota int, nombreMascota varchar(15),
+generoMascota varchar(15),razaMascota varchar(15), cantidad int)
+BEGIN
+-- instrucciones de SQL 
+	insert into mascota values (idMascota,nombreMascota,generoMascota,
+    razaMascota,cantidad);
 
+END // 
+DELIMITER ;
+
+select * from mascota;
+
+-- ejecutar el procedimiento 
+-- Sintaxis es call nombreProcedimiento (valores)
+CALL InsertarMascota(5,'Firulais','Macho','Criolla',1);
+
+select * from producto;
+describe producto;
+DELIMITER //
+CREATE PROCEDURE ConsultarPrecio(out precio float)
+BEGIN
+-- instrucciones de SQL 
+	select count(*) into precio from producto;
+
+END // 
+DELIMITER ;
+
+call ConsultarPrecio(@resultado);
+ select @resultado;
+*/
 /*disparadores Triggers
 tipos
 before insert
@@ -245,6 +279,43 @@ full join: devuleve todas las filas
 
 select campoConsultaTabla1 as 'Alias', campoConsultaTabla2 from tabla1 inner join tabla2 on tabla1.nombreColumnaTabla1 = tabla2.nombreColumna2 inner join tabla3
 on tabla1.nombrecColumnaTabla1=tabla3.nombreColumnaTabla3*/
+
+/*Consultar agrupando group by selecto camposAConsultar from nombreTabla condicion group by CampoAgrupar orden*/
+
+/* like not like; select camposConsultar from nombreTabla condicion like valorAConsultarT% %T% T%*/
+#select * from cliente where nombre like '%a%'; 
+#select * from cliente where nombre like 'a%';
+
+/*Vistas Views Es una consulta almacenada en la base de datos que 
+genera una tabla virtual*/
+
+/* sintaxis 
+create view nombreVista as 
+select valoresaConsultar from nombreTabla where condiciones
+Ppara ejecutar se realiza una consulta de la vista*/
+describe cliente;
+create view vistaCliente as
+Select * from cliente where cedulaCliente=7226705;
+
+select * from vistaCliente;
+
+/*modificar uuna vista 
+alter view nombreVista as 
+select valoresaConsultar from nombreTabla where condiciones*/
+
+/*eliminar una vista
+
+drop view nombreVista*/
+
+/*create view consultaTele as
+select * from cliente 
+where telefono like '%4%'
+and telefono like '%6%'
+and telefono like '%7%';
+
+select * from consultaTele;*/
+
+
 
 
 
