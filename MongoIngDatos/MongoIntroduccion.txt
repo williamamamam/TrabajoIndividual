@@ -1,0 +1,318 @@
+﻿show dbs
+admin   40.00 KiB
+config  60.00 KiB
+local   80.00 KiB
+use dbs
+switched to db dbs
+use tienda
+switched to db tienda
+db.createCollection("productos")
+{ ok: 1 }
+show collections
+productos
+db.productos.insertOne({nombre:"Laptop",precio:1200000,cantidad:3})
+{
+ acknowledged: true,
+ insertedId: ObjectId('680fce82e59f005428fc622f')
+}
+db.productos.insertMany({nombre:"Mouse",precio:5000,cantidad:15},{nombre:"Teclados",precio:70800,cantidad:34},{nombre:"Torre PC",precio:45000,cantidad:71})
+MongoInvalidArgumentError: Argument "docs" must be an array of documents
+db.productos.insertMany([{nombre:"Mouse",precio:5000,cantidad:15},{nombre:"Teclados",precio:70800,cantidad:34},{nombre:"Torre PC",precio:45000,cantidad:71}])
+
+
+{
+ acknowledged: true,
+ insertedIds: {
+   '0': ObjectId('680fd008e59f005428fc6230'),
+   '1': ObjectId('680fd008e59f005428fc6231'),
+   '2': ObjectId('680fd008e59f005428fc6232')
+ }
+}
+dp.productos.find()
+ReferenceError: dp is not defined
+db.productos.find()
+{
+ _id: ObjectId('680fce82e59f005428fc622f'),
+ nombre: 'Laptop',
+ precio: 1200000,
+ cantidad: 3
+}
+{
+ _id: ObjectId('680fd008e59f005428fc6230'),
+ nombre: 'Mouse',
+ precio: 5000,
+ cantidad: 15
+}
+{
+ _id: ObjectId('680fd008e59f005428fc6231'),
+ nombre: 'Teclados',
+ precio: 70800,
+ cantidad: 34
+}
+{
+ _id: ObjectId('680fd008e59f005428fc6232'),
+ nombre: 'Torre PC',
+ precio: 45000,
+ cantidad: 71
+}
+db.productos.find().pretty
+[Function: pretty] {
+ returnType: 'this',
+ serverVersions: [ '0.0.0', '999.999.999' ],
+ apiVersions: [ 0, Infinity ],
+ topologies: [ 'ReplSet', 'Sharded', 'LoadBalanced', 'Standalone' ],
+ returnsPromise: false,
+ deprecated: false,
+ platforms: [ 'Compass', 'Browser', 'CLI' ],
+ isDirectShellCommand: false,
+ acceptsRawInput: false,
+ shellCommandCompleter: undefined,
+ help: [Function (anonymous)] Help
+}
+db.productos.find($eq)
+ReferenceError: $eq is not defined
+db.productos.find({precio:{$gt:45000}})
+{
+ _id: ObjectId('680fce82e59f005428fc622f'),
+ nombre: 'Laptop',
+ precio: 1200000,
+ cantidad: 3
+}
+{
+ _id: ObjectId('680fd008e59f005428fc6231'),
+ nombre: 'Teclados',
+ precio: 70800,
+ cantidad: 34
+}
+db.productos.find({precio:{$eq:45000}})
+{
+ _id: ObjectId('680fd008e59f005428fc6232'),
+ nombre: 'Torre PC',
+ precio: 45000,
+ cantidad: 71
+}
+db.productos.find({precio:{$gte:1200000}})
+{
+ _id: ObjectId('680fce82e59f005428fc622f'),
+ nombre: 'Laptop',
+ precio: 1200000,
+ cantidad: 3
+}
+db.productos.find({precio:{$lt:71000}})
+{
+ _id: ObjectId('680fd008e59f005428fc6230'),
+ nombre: 'Mouse',
+ precio: 5000,
+ cantidad: 15
+}
+{
+ _id: ObjectId('680fd008e59f005428fc6231'),
+ nombre: 'Teclados',
+ precio: 70800,
+ cantidad: 34
+}
+{
+ _id: ObjectId('680fd008e59f005428fc6232'),
+ nombre: 'Torre PC',
+ precio: 45000,
+ cantidad: 71
+}
+db.productos.find({precio:{$lte:5000}})
+{
+ _id: ObjectId('680fd008e59f005428fc6230'),
+ nombre: 'Mouse',
+ precio: 5000,
+ cantidad: 15
+}
+db.productos.find({precio:{$ne:5000}})
+{
+ _id: ObjectId('680fce82e59f005428fc622f'),
+ nombre: 'Laptop',
+ precio: 1200000,
+ cantidad: 3
+}
+{
+ _id: ObjectId('680fd008e59f005428fc6231'),
+ nombre: 'Teclados',
+ precio: 70800,
+ cantidad: 34
+}
+{
+ _id: ObjectId('680fd008e59f005428fc6232'),
+ nombre: 'Torre PC',
+ precio: 45000,
+ cantidad: 71
+}
+db.productos.find({precio:{$in:5000,100000}})
+SyntaxError: Unexpected token (1:42)
+
+
+[0m[31m[1m>[22m[39m[90m 1 |[39m db[33m.[39mproductos[33m.[39mfind({precio[33m:[39m{$in[33m:[39m[35m5000[39m[33m,[39m[35m100000[39m}})
+ [90m   |[39m                                           [31m[1m^[22m[39m[0m
+db.productos.find({precio:{$in:5000}})
+MongoServerError[BadValue]: $in needs an array
+db.productos.find({precio:{$in:[5000,100000]}})
+{
+ _id: ObjectId('680fd008e59f005428fc6230'),
+ nombre: 'Mouse',
+ precio: 5000,
+ cantidad: 15
+}
+db.productos.find({precio:{$in:[1000,122000]}})
+db.productos.find({precio:{$in:[70800,1200000]}})
+{
+ _id: ObjectId('680fce82e59f005428fc622f'),
+ nombre: 'Laptop',
+ precio: 1200000,
+ cantidad: 3
+}
+{
+ _id: ObjectId('680fd008e59f005428fc6231'),
+ nombre: 'Teclados',
+ precio: 70800,
+ cantidad: 34
+}
+db.productos.find({precio:{$nin:[70800,1200000]}})
+{
+ _id: ObjectId('680fd008e59f005428fc6230'),
+ nombre: 'Mouse',
+ precio: 5000,
+ cantidad: 15
+}
+{
+ _id: ObjectId('680fd008e59f005428fc6232'),
+ nombre: 'Torre PC',
+ precio: 45000,
+ cantidad: 71
+}
+db.productos.find({precio:{$or:[{"precio":5000},{"precio":45000}]}
+SyntaxError: Unexpected token, expected "," (1:66)
+
+
+[0m[31m[1m>[22m[39m[90m 1 |[39m db[33m.[39mproductos[33m.[39mfind({precio[33m:[39m{$or[33m:[39m[{[32m"precio"[39m[33m:[39m[35m5000[39m}[33m,[39m{[32m"precio"[39m[33m:[39m[35m45000[39m}]}
+ [90m   |[39m                                                                   [31m[1m^[22m[39m[0m
+db.productos.find({precio:{$or:[{"precio":5000},{"precio":45000}]}})
+MongoServerError[BadValue]: unknown operator: $or
+db.productos.find({$or:[{"precio":5000},{"precio":45000}]})
+{
+ _id: ObjectId('680fd008e59f005428fc6230'),
+ nombre: 'Mouse',
+ precio: 5000,
+ cantidad: 15
+}
+{
+ _id: ObjectId('680fd008e59f005428fc6232'),
+ nombre: 'Torre PC',
+ precio: 45000,
+ cantidad: 71
+}
+db.productos.find({$and:[{"precio":5000},{"precio":45000}]})
+db.productos.find({$and:[{"nombre":'Torre PC'},{"precio":45000}]})
+{
+ _id: ObjectId('680fd008e59f005428fc6232'),
+ nombre: 'Torre PC',
+ precio: 45000,
+ cantidad: 71
+}
+db.productos.find({$not:[{"nombre":'Torre PC'},{"precio":45000}]})
+MongoServerError[BadValue]: unknown top level operator: $not. If you are trying to negate an entire expression, use $nor.
+db.productos.find({precio:{$not:{$gt:45000}}})
+{
+ _id: ObjectId('680fd008e59f005428fc6230'),
+ nombre: 'Mouse',
+ precio: 5000,
+ cantidad: 15
+}
+{
+ _id: ObjectId('680fd008e59f005428fc6232'),
+ nombre: 'Torre PC',
+ precio: 45000,
+ cantidad: 71
+}
+db.productos.find({$and:[{"nombre":'Torre PC'},{"precio":45000}]})
+{
+ _id: ObjectId('680fd008e59f005428fc6232'),
+ nombre: 'Torre PC',
+ precio: 45000,
+ cantidad: 71
+}
+db.productos.find({$nor:[{"nombre":'Torre PC'},{"precio":45000}]})
+{
+ _id: ObjectId('680fce82e59f005428fc622f'),
+ nombre: 'Laptop',
+ precio: 1200000,
+ cantidad: 3
+}
+{
+ _id: ObjectId('680fd008e59f005428fc6230'),
+ nombre: 'Mouse',
+ precio: 5000,
+ cantidad: 15
+}
+{
+ _id: ObjectId('680fd008e59f005428fc6231'),
+ nombre: 'Teclados',
+ precio: 70800,
+ cantidad: 34
+}
+db.productos.find({cantidad:{$exists:true}})
+{
+ _id: ObjectId('680fce82e59f005428fc622f'),
+ nombre: 'Laptop',
+ precio: 1200000,
+ cantidad: 3
+}
+{
+ _id: ObjectId('680fd008e59f005428fc6230'),
+ nombre: 'Mouse',
+ precio: 5000,
+ cantidad: 15
+}
+{
+ _id: ObjectId('680fd008e59f005428fc6231'),
+ nombre: 'Teclados',
+ precio: 70800,
+ cantidad: 34
+}
+{
+ _id: ObjectId('680fd008e59f005428fc6232'),
+ nombre: 'Torre PC',
+ precio: 45000,
+ cantidad: 71
+}
+db.productos.find({precio:{$type:int}})
+ReferenceError: int is not defined
+db.productos.find({precio:{$type:"int"}})
+{
+ _id: ObjectId('680fce82e59f005428fc622f'),
+ nombre: 'Laptop',
+ precio: 1200000,
+ cantidad: 3
+}
+{
+ _id: ObjectId('680fd008e59f005428fc6230'),
+ nombre: 'Mouse',
+ precio: 5000,
+ cantidad: 15
+}
+{
+ _id: ObjectId('680fd008e59f005428fc6231'),
+ nombre: 'Teclados',
+ precio: 70800,
+ cantidad: 34
+}
+{
+ _id: ObjectId('680fd008e59f005428fc6232'),
+ nombre: 'Torre PC',
+ precio: 45000,
+ cantidad: 71
+}
+db.productos.find({precio:{$mod:[3,1]}})
+db.productos.find({nombre:{$regex:/Teclados/}})
+{
+ _id: ObjectId('680fd008e59f005428fc6231'),
+ nombre: 'Teclados',
+ precio: 70800,
+ cantidad: 34
+}
+db.productos.find({nombre:{$elemMatch:{nombre: 'Teclados',precio: {gt:70800}}}})
