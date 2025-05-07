@@ -1,0 +1,263 @@
+use colegio
+switched to db colegio
+ db.createCollection("alumnos")
+{ ok: 1 }
+db.alumnos.insertMany([
+  { id: 1, nombre: "Laura Omme", gradoId: 1 },
+  { id: 2, nombre: "Mariana ROjas", gradoId: 2 },
+  { id: 3, nombre: "William Ramirez", gradoId: 3 },
+  { id: 4, nombre: "Paula Chaves", gradoId: 1 },
+  { id: 5, nombre: "Elena Torres", gradoId: 2 }
+SyntaxError: Unexpected token, expected "," (7:0)
+
+[0m [90m 5 |[39m   { id[33m:[39m [35m4[39m[33m,[39m nombre[33m:[39m [32m"Paula Chaves"[39m[33m,[39m gradoId[33m:[39m [35m1[39m }[33m,[39m
+ [90m 6 |[39m   { id[33m:[39m [35m5[39m[33m,[39m nombre[33m:[39m [32m"Elena Torres"[39m[33m,[39m gradoId[33m:[39m [35m2[39m }
+[31m[1m>[22m[39m[90m 7 |[39m
+ [90m   |[39m [31m[1m^[22m[39m[0m
+db.alumnos.insertMany([
+  { id: 1, nombre: "Laura Omme", gradoId: 1 },
+  { id: 2, nombre: "Mariana ROjas", gradoId: 2 },
+  { id: 3, nombre: "William Ramirez", gradoId: 3 },
+  { id: 4, nombre: "Paula Chaves", gradoId: 1 },
+  { id: 5, nombre: "Elena Torres", gradoId: 2 }
+])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6818fea55e04c04b4e5067f5'),
+    '1': ObjectId('6818fea55e04c04b4e5067f6'),
+    '2': ObjectId('6818fea55e04c04b4e5067f7'),
+    '3': ObjectId('6818fea55e04c04b4e5067f8'),
+    '4': ObjectId('6818fea55e04c04b4e5067f9')
+  }
+}
+db.createCollection("materias")
+{ ok: 1 }
+db.materias.insertMany([
+  { id: 101, nombre: "Ingeniera de Datos",creditos:2 },
+  { id: 102, nombre: "Calculo 2",creditos:3 },
+  { id: 103, nombre: "CornerStone",creditos:2 },
+  { id: 104, nombre: "Algebra Lineal",creditos:3 },
+  { id: 105, nombre: "Arquitectura Computador",creditos:2}
+])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6818feb15e04c04b4e5067fa'),
+    '1': ObjectId('6818feb15e04c04b4e5067fb'),
+    '2': ObjectId('6818feb15e04c04b4e5067fc'),
+    '3': ObjectId('6818feb15e04c04b4e5067fd'),
+    '4': ObjectId('6818feb15e04c04b4e5067fe')
+  }
+}
+db.createCollection("grados")
+{ ok: 1 }
+db.grados.insertMany([
+  { id: 1, nombre: "Septimo" },
+  { id: 2, nombre: "Octavo" },
+  { id: 3, nombre: "Noveno" },
+  { id: 4, nombre: "Decimoo" },
+  { id: 5, nombre: "Once" }
+])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6818febe5e04c04b4e5067ff'),
+    '1': ObjectId('6818febe5e04c04b4e506800'),
+    '2': ObjectId('6818febe5e04c04b4e506801'),
+    '3': ObjectId('6818febe5e04c04b4e506802'),
+    '4': ObjectId('6818febe5e04c04b4e506803')
+  }
+}
+db.createCollection("calificaciones")
+{ ok: 1 }
+db.calificaciones.insertMany([
+  { alumnoId: 1, materiaId: 101, nota: "A" },
+  { alumnoId: 2, materiaId: 102, nota: "C" },
+  { alumnoId: 3, materiaId: 103, nota: "B" },
+  { alumnoId: 4, materiaId: 104, nota: "F" },
+  { alumnoId: 5, materiaId: 105, nota: "B" }
+])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6818feca5e04c04b4e506804'),
+    '1': ObjectId('6818feca5e04c04b4e506805'),
+    '2': ObjectId('6818feca5e04c04b4e506806'),
+    '3': ObjectId('6818feca5e04c04b4e506807'),
+    '4': ObjectId('6818feca5e04c04b4e506808')
+  }
+}
+db.calificaciones.aggregate([
+  {
+    $lookup: {
+      from: "alumnos",
+      localField: "alumnoId",
+      foreignField: "id",
+      as: "alumno"
+    }
+  },
+  {
+    $lookup: {
+      from: "materias",
+      localField: "materiaId",
+      foreignField: "id",
+      as: "materia"
+    }
+  },
+  {
+    $lookup: {
+      from: "grados",
+      localField: "alumno.gradoId",
+      foreignField: "id",
+      as: "grado"
+    }
+  }
+])
+{
+  _id: ObjectId('6818feca5e04c04b4e506804'),
+  alumnoId: 1,
+  materiaId: 101,
+  nota: 'A',
+  alumno: [
+    {
+      _id: ObjectId('6818fea55e04c04b4e5067f5'),
+      id: 1,
+      nombre: 'Laura Omme',
+      gradoId: 1
+    }
+  ],
+  materia: [
+    {
+      _id: ObjectId('6818feb15e04c04b4e5067fa'),
+      id: 101,
+      nombre: 'Ingeniera de Datos',
+      creditos: 2
+    }
+  ],
+  grado: [
+    {
+      _id: ObjectId('6818febe5e04c04b4e5067ff'),
+      id: 1,
+      nombre: 'Septimo'
+    }
+  ]
+}
+{
+  _id: ObjectId('6818feca5e04c04b4e506805'),
+  alumnoId: 2,
+  materiaId: 102,
+  nota: 'C',
+  alumno: [
+    {
+      _id: ObjectId('6818fea55e04c04b4e5067f6'),
+      id: 2,
+      nombre: 'Mariana ROjas',
+      gradoId: 2
+    }
+  ],
+  materia: [
+    {
+      _id: ObjectId('6818feb15e04c04b4e5067fb'),
+      id: 102,
+      nombre: 'Calculo 2',
+      creditos: 3
+    }
+  ],
+  grado: [
+    {
+      _id: ObjectId('6818febe5e04c04b4e506800'),
+      id: 2,
+      nombre: 'Octavo'
+    }
+  ]
+}
+{
+  _id: ObjectId('6818feca5e04c04b4e506806'),
+  alumnoId: 3,
+  materiaId: 103,
+  nota: 'B',
+  alumno: [
+    {
+      _id: ObjectId('6818fea55e04c04b4e5067f7'),
+      id: 3,
+      nombre: 'William Ramirez',
+      gradoId: 3
+    }
+  ],
+  materia: [
+    {
+      _id: ObjectId('6818feb15e04c04b4e5067fc'),
+      id: 103,
+      nombre: 'CornerStone',
+      creditos: 2
+    }
+  ],
+  grado: [
+    {
+      _id: ObjectId('6818febe5e04c04b4e506801'),
+      id: 3,
+      nombre: 'Noveno'
+    }
+  ]
+}
+{
+  _id: ObjectId('6818feca5e04c04b4e506807'),
+  alumnoId: 4,
+  materiaId: 104,
+  nota: 'F',
+  alumno: [
+    {
+      _id: ObjectId('6818fea55e04c04b4e5067f8'),
+      id: 4,
+      nombre: 'Paula Chaves',
+      gradoId: 1
+    }
+  ],
+  materia: [
+    {
+      _id: ObjectId('6818feb15e04c04b4e5067fd'),
+      id: 104,
+      nombre: 'Algebra Lineal',
+      creditos: 3
+    }
+  ],
+  grado: [
+    {
+      _id: ObjectId('6818febe5e04c04b4e5067ff'),
+      id: 1,
+      nombre: 'Septimo'
+    }
+  ]
+}
+{
+  _id: ObjectId('6818feca5e04c04b4e506808'),
+  alumnoId: 5,
+  materiaId: 105,
+  nota: 'B',
+  alumno: [
+    {
+      _id: ObjectId('6818fea55e04c04b4e5067f9'),
+      id: 5,
+      nombre: 'Elena Torres',
+      gradoId: 2
+    }
+  ],
+  materia: [
+    {
+      _id: ObjectId('6818feb15e04c04b4e5067fe'),
+      id: 105,
+      nombre: 'Arquitectura Computador',
+      creditos: 2
+    }
+  ],
+  grado: [
+    {
+      _id: ObjectId('6818febe5e04c04b4e506800'),
+      id: 2,
+      nombre: 'Octavo'
+    }
+  ]
+}
+colegio
+
