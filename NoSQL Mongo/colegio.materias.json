@@ -1,0 +1,35 @@
+[{
+  "_id": {
+    "$oid": "681aa4c0f69cecb769e1af7d"
+  },
+  "id": 1,
+  "nombre": "lengua castellana"
+},
+{
+  "_id": {
+    "$oid": "681aa4c0f69cecb769e1af7e"
+  },
+  "id": 2,
+  "nombre": "agustinologia"
+},
+{
+  "_id": {
+    "$oid": "681aa4c0f69cecb769e1af7f"
+  },
+  "id": 3,
+  "nombre materia": "religion"
+},
+{
+  "_id": {
+    "$oid": "681aa4c0f69cecb769e1af80"
+  },
+  "id": 4,
+  "nombre": "diseño"
+},
+{
+  "_id": {
+    "$oid": "681aa4c0f69cecb769e1af81"
+  },
+  "id": 5,
+  "nombre": "ingles"
+}]

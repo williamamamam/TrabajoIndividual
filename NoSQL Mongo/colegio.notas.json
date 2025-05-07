@@ -1,0 +1,40 @@
+[{
+  "_id": {
+    "$oid": "681aa525f69cecb769e1af86"
+  },
+  "estudiante": 1,
+  "materia": 1,
+  "calificacion": "S"
+},
+{
+  "_id": {
+    "$oid": "681aa525f69cecb769e1af87"
+  },
+  "estudiante": 2,
+  "materia": 2,
+  "calificacion": "D"
+},
+{
+  "_id": {
+    "$oid": "681aa525f69cecb769e1af88"
+  },
+  "estudiante": 3,
+  "materia": 3,
+  "calificacion": "F"
+},
+{
+  "_id": {
+    "$oid": "681aa525f69cecb769e1af89"
+  },
+  "estudiante": 4,
+  "materia": 4,
+  "calificacion": "D"
+},
+{
+  "_id": {
+    "$oid": "681aa525f69cecb769e1af8a"
+  },
+  "estudiante": 5,
+  "materia": 5,
+  "calificacion": "S"
+}]
