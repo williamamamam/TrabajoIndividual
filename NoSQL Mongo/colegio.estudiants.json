@@ -1,0 +1,45 @@
+[{
+  "_id": {
+    "$oid": "681aa2e8f69cecb769e1af71"
+  },
+  "id": 1,
+  "nombre": "samuel bejarano",
+  "genero": "m",
+  "curso": "11-1"
+},
+{
+  "_id": {
+    "$oid": "681aa2e8f69cecb769e1af72"
+  },
+  "id": 2,
+  "nombre": "william ramirez",
+  "genero": "m",
+  "curso": "11-1"
+},
+{
+  "_id": {
+    "$oid": "681aa2e8f69cecb769e1af73"
+  },
+  "id": 3,
+  "nombre": "william ramirez",
+  "genero": "m",
+  "curso": "11-4"
+},
+{
+  "_id": {
+    "$oid": "681aa2e8f69cecb769e1af74"
+  },
+  "id": 4,
+  "nombre": "mariana rojas",
+  "genero": "f",
+  "curso": "11-4"
+},
+{
+  "_id": {
+    "$oid": "681aa2e8f69cecb769e1af75"
+  },
+  "id": 5,
+  "nombre": "mariana martinez",
+  "genero": "f",
+  "curso": "11-2"
+}]

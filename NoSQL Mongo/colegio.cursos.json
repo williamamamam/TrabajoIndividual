@@ -1,0 +1,21 @@
+[{
+  "_id": {
+    "$oid": "681aa358f69cecb769e1af78"
+  },
+  "curso": "11-1",
+  "estudiantes": 2
+},
+{
+  "_id": {
+    "$oid": "681aa358f69cecb769e1af79"
+  },
+  "curso": "11-4",
+  "estudiantes": 2
+},
+{
+  "_id": {
+    "$oid": "681aa358f69cecb769e1af7a"
+  },
+  "curso": "11-2",
+  "estudiantes": 1
+}]
